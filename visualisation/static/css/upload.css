@@ -1,0 +1,161 @@
+.upload__container {
+  display: flex;
+  justify-content: center; /* Centrer horizontalement */
+  align-items: center;    /* Centrer verticalement */
+  height: 60vh;          /* Prendre toute la hauteur de la page */
+}
+body {
+  background-color: #efeff39d; /* Couleur de fond de la page */
+}
+
+
+
+.form__upload {
+  grid-row: 1/1;
+  grid-column: 1/2;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: center;
+}
+
+
+
+.form__selects {
+  grid-row: 2/3;
+  grid-column: 1/2;
+
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  justify-content: center;
+}
+
+.form-select {
+  margin-bottom: 20px;
+}
+
+.image__container {
+  grid-row: 1/-1;
+  grid-column: 2/3;
+
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.image__container img {
+  width: 100%;
+  max-width: 800px;
+}
+
+input[type="file"] {
+  width: 100%;
+  position: relative;
+}
+
+/* file upload button */
+input[type="file"]::file-selector-button {
+  width: 136px;
+  color: transparent;
+  border-radius: 4px;
+  padding: 0 16px;
+  height: 40px;
+  cursor: pointer;
+  background-color: #9ac7a8;
+  border: 1px solid rgba(0, 0, 0, 0.16);
+  box-shadow: 0px 1px 0px rgba(0, 0, 0, 0.05);
+  margin-right: 16px;
+  transition: background-color 200ms;
+}
+
+/* file upload button hover state */
+input[type="file"]::file-selector-button:hover {
+  background-color: #0d370d75;
+}
+
+/* file upload button active state */
+input[type="file"]::file-selector-button:active {
+  background-color: #e5e7eb;
+}
+
+/* Faked label styles and icon */
+input[type="file"]::before {
+  position: absolute;
+  pointer-events: none;
+  top: 10px;
+  left: 16px;
+  height: 20px;
+  width: 20px;
+ 
+  content: "";
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%230964B0'%3E%3Cpath d='M18 15v3H6v-3H4v3c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-3h-2zM7 9l1.41 1.41L11 7.83V16h2V7.83l2.59 2.58L17 9l-5-5-5 5z'/%3E%3C/svg%3E");
+}
+
+input[type="file"]::after {
+  position: absolute;
+  pointer-events: none;
+  top: 11px;
+  left: 40px;
+  color: #0c0c0b;
+  font-weight: bold;
+  content: "Upload File";
+}
+
+.form__paragraph {
+  align-self: self-start;
+  font-size: 20px;
+  font-weight: bold;
+  
+}
+
+.scrollable-table {
+  width: 100%;
+  overflow-x: auto; /* Enable horizontal scrolling */
+  overflow-y: auto; /* Enable vertical scrolling */
+  max-height: 400px; /* Adjust the max-height as needed */
+}
+.scrollable-table table {
+  width: auto; /* Set table width to auto */
+  min-width: 100%; /* Minimum table width */
+}
+
+/* Style pour les en-têtes */
+.scrollable-table thead th {
+  background-color: #9ac7a8; /* Fond des en-têtes */
+  padding: 12px 8px; /* Espacement interne */
+  border: 1px solid #ccc; /* Bordure pour chaque cellule */
+  text-align: left; /* Alignement à gauche */
+  font-weight: bold; /* Texte en gras */
+}
+
+/* Style pour les cellules du corps */
+.scrollable-table tbody td {
+  padding: 10px 8px; /* Espacement interne */
+  border: 1px solid #603535; /* Bordure pour chaque cellule */
+}
+
+/* Rendre la table défilable horizontalement */
+.scrollable-table {
+  overflow-x: auto; /* Défilement horizontal */
+  overflow-y: auto; /* Défilement vertical */
+  max-height: 500px; /* Limite en hauteur */
+ 
+  margin-top: 20px; /* Espacement en haut */
+}
+
+/* Optionnel : style pour les lignes alternées */
+.scrollable-table tbody tr:nth-child(odd) {
+  background-color: #f9f9f9; /* Couleur de fond pour les lignes impaires */
+}
+.scrollable-table tbody tr:nth-child(even) {
+  background-color: #ffffff; /* Couleur de fond pour les lignes paires */
+}
+
+.bt1{
+  margin: 10px;
+}
+
