@@ -1,0 +1,25 @@
+{% extends '../base/base.html' %} {% load static %} {% block style %}
+<link href="{% static 'css/upload.css' %}" rel="stylesheet" />
+<script src="{% static 'js/upload.js' %}" defer></script>
+{% endblock style %} {% block content %}
+<div class="upload__container">
+  <form
+    class="form__upload"
+    action="{% url 'bernoulli' %}"
+    method="post"
+    enctype="multipart/form-data"
+  >
+    {% csrf_token %} {{ form.as_p }}
+    <button class="btn btn-primary" type="submit">
+      Afficher la distribution
+    </button>
+  </form>
+
+  <div class="image__container">
+    {% if plot_data %}
+    <p>result :</p>
+    <!-- <img src="data:image/png;base64, {{graph|safe}}" alt="chart" /> -->
+    {{plot_data|safe}} {% endif %}
+  </div>
+</div>
+{% endblock content %}

@@ -1,236 +1,149 @@
-{% extends '../base/base.html' %} {% load static %} {% block style %}
+{% extends '../base/base.html' %}
+{% load static %}
+
+{% block style %}
 <link href="{% static 'css/upload.css' %}" rel="stylesheet" />
 <script src="{% static 'js/upload.js' %}" defer></script>
+{% endblock style %}
 
-
-{% endblock style %} {% block content %}
-<div class="upload__container">
-  <form
-    class="form__upload"
-    action="{% url 'df_upload' %}"
-    method="post"
-    enctype="multipart/form-data"
-  >
-    {% csrf_token %}
-    <p class="form__paragraph">choose the concerned file csv or excel :</p>
-    <input
-      type="file"
-      id="csv_file"
-      name="csv_file"
-      accept=".csv, .xls, .xlsx"
-    />
-    <button class="btn btn-success mt-2" class="bt1" type="submit">Show Table</button>
-  </form>
-
-  {% if df %}
-
-  <div class="card1 ms-2">
-    <h2>Form</h2>
-    <form
-      method="post"
-      action="{% url 'df_search' %}"
-      enctype="multipart/form-data"
-    >
-      {% csrf_token %}
-
-      <select
-        class="form-select mb-3"
-        id="parcourir_chart"
-        name="parcourir_chart"
-      >
-        <option value="Nothing">-</option>
-        <option value="FindElem">Find an element</option>
-        <option value="Slicing">Slicing the table</option>
-      </select>
-
-      <select class="form-select mb-3" id="col_name1" name="col_name1">
-        {% for col in cols %}
-        <option value="{{ col }}">{{ col }}</option>
-        {% endfor %}
-      </select>
-
-      <input
-        class="form-control mb-3"
-        type="number"
-        placeholder="Le numero de la ligne :"
-        id="RowNumb"
-        name="RowNumb"
-        min="0"
-        max="{{ max_row }}"
-        step="1"
-      />
-
-      <select
-        class="form-select mb-3"
-        id="parcourir_rows"
-        name="parcourir_rows"
-      >
-        <option value="Nothing">Browse rows</option>
-        <option value="NbrOfRowsTop">Number of rows from the top</option>
-        <option value="NbrOfRowsBottom">Number of rows from the bottom</option>
-        <option value="FromRowToRow">From x row to y row</option>
-      </select>
-
-      <input
-        class="form-control mb-3"
-        type="number"
-        placeholder="Number of rows starting from the Top"
-        id="Head"
-        name="Head"
-        min="0"
-        max="{{ max_row }}"
-        step="1"
-      />
-
-      <input
-        class="form-control mb-3"
-        type="number"
-        placeholder="Number of rows starting from the Bottom"
-        id="Tail"
-        name="Tail"
-        min="0"
-        max="{{ max_row }}"
-        step="1"
-      />
-
-      <input
-        class="form-control mb-3"
-        type="number"
-        placeholder="From row number "
-        id="FromRowNumb"
-        name="FromRowNumb"
-        min="0"
-        max="{{ max_row }}"
-        step="1"
-      />
-
-      <input
-        class="form-control mb-3"
-        type="number"
-        placeholder="To the row number "
-        id="ToRowNumb"
-        name="ToRowNumb"
-        min="0"
-        max="{{ max_row }}"
-        step="1"
-      />
-
-      {% for col in cols %}
-      <div class="form-check form-check-inline" id="colonne">
-        <input
-          class="form-check-input"
-          type="checkbox"
-          name="selected_columns"
-          value="{{ col }}"
-          id="{{ col }}"
-        />
-        <label class="form-check-label" for="{{ col }}"> {{ col }} </label>
-      </div>
-      {% endfor %}
-
-      <button class="btn btn-success" type="submit">Submit</button>
-      <hr>
-    </form>
-    <div class="specific-search-result">
-      {% if resultat is not None %}
-      <h3>Résultat :</h3>
-      <p>{{ resultat }}</p>
-      {% endif %}
+{% block content %}
+<div class="main-container">
+    <!-- Section d'en-tête -->
+    <div class="welcome-section">
+        <h1>Analyse de Données</h1>
+        <p>Importez vos fichiers CSV ou Excel pour commencer l'analyse</p>
     </div>
-  </div>
-  <!--
 
-  <form
-    class="form__selects"
-    method="get"
-    action="{% url 'df_search' %}"
-    enctype="multipart/form-data"
-  >
-    {% csrf_token %}
-    <p class="form__paragraph">choose the line and the column :</p>
-    <select name="methode" id="methode">
-      <option value="Indexation">Indexation</option>
-      <option value="Slicing">Slicing</option>
-    </select>
-    <input
-      type="number"
-      name="line1"
-      id="line1"
-      class="form-control"
-      placeholder="From line ..."
-    />
-    <input
-      type="number"
-      class="form-control"
-      name="line2"
-      id="line2"
-      placeholder="To line .... "
-    />
-    <button class="btn btn-primary" type="submit">Search</button>
-    {% if search_result %}{{ search_result }}{% endif %}
-  </form> -->
-
-  {% endif %}
-  <div class="image__container">
-    <div class="scrollable-table">
-      {% if df %}
-      <!-- Use the safe filter to render HTML -->
-      {{ df|safe }} {% else %}
-      <p>No DataFrame available</p>
-      {% endif %}
+    <!-- Section upload -->
+    <div class="upload-box">
+        <form class="upload-form" action="{% url 'df_upload' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="file-input-container">
+                <input type="file" id="csv_file" name="csv_file" accept=".csv, .xls, .xlsx" class="file-input" />
+                <label for="csv_file" class="file-label">
+                    <span class="file-icon">📁</span>
+                    <span class="file-text">Choisir un fichier</span>
+                </label>
+            </div>
+            <button type="submit" class="upload-btn">Analyser les données</button>
+        </form>
     </div>
-  </div>
+
+    {% if df %}
+    <div class="analysis-section">
+        <!-- Options d'analyse -->
+        <div class="analysis-options">
+            <h2>Options d'analyse</h2>
+            <form method="post" action="{% url 'df_search' %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <div class="select-group">
+                    <label>Type d'analyse</label>
+                    <select name="parcourir_chart" id="parcourir_chart">
+                        <option value="Nothing">Sélectionnez une option</option>
+                        <option value="Statistics">Statistiques</option>
+                        <option value="FindElem">Rechercher un élément</option>
+                        <option value="Slicing">Découpage des données</option>
+                    </select>
+                </div>
+
+                <!-- Options Statistiques -->
+                <div id="statistics_options" class="option-group hidden">
+                    <div class="select-group">
+                        <label>Type de statistique</label>
+                        <select name="stat_type" id="stat_type">
+                            <option value="all">Toutes les statistiques</option>
+                            <option value="mean">Moyenne</option>
+                            <option value="median">Médiane</option>
+                            <option value="mode">Mode</option>
+                        </select>
+                    </div>
+                    
+                    <div class="select-group">
+                        <label>Colonne à analyser</label>
+                        <select name="stat_column" id="stat_column">
+                            {% for col in cols %}
+                            <option value="{{ col }}">{{ col }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Options Recherche -->
+                <div id="search_options" class="option-group hidden">
+                    <div class="select-group">
+                        <label>Colonne</label>
+                        <select name="col_name1" id="col_name1">
+                            {% for col in cols %}
+                            <option value="{{ col }}">{{ col }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Numéro de ligne</label>
+                        <input type="number" name="RowNumb" id="RowNumb" min="0" max="{{ max_row }}" />
+                    </div>
+                </div>
+
+                 <!-- Section Découpage -->
+            <div id="slicing_options" class="form-group hidden">
+                <label for="parcourir_rows">Type de découpage :</label>
+                <select class="form-select" id="parcourir_rows" name="parcourir_rows">
+                    <option value="NbrOfRowsTop">Lignes depuis le début</option>
+                    <option value="NbrOfRowsBottom">Lignes depuis la fin</option>
+                    <option value="FromRowToRow">Sélection personnalisée</option>
+                </select>
+
+                <div id="row_inputs" class="hidden">
+                    <input type="number" class="form-control mt-3" id="Head" name="Head" 
+                           placeholder="Nombre de lignes depuis le début">
+                    <input type="number" class="form-control mt-3" id="Tail" name="Tail" 
+                           placeholder="Nombre de lignes depuis la fin">
+                    <input type="number" class="form-control mt-3" id="FromRowNumb" name="FromRowNumb" 
+                           placeholder="Ligne de début">
+                    <input type="number" class="form-control mt-3" id="ToRowNumb" name="ToRowNumb" 
+                           placeholder="Ligne de fin">
+                </div>
+                <hr>
+                {% for col in cols %}
+                <div class="form-check form-check-inline" id="colonne">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    name="selected_columns"
+                    value="{{ col }}"
+                    id="{{ col }}"
+                  />
+                  <label class="form-check-label" for="{{ col }}"> {{ col }} </label>
+                </div>
+                {% endfor %}
+            </div>
+            
+
+                <button type="submit" class="analyze-btn">Lancer l'analyse</button>
+            </form>
+        </div>
+
+        <!-- Résultats -->
+        {% if resultat %}
+        <div class="results-box">
+            <h3>Résultats de l'analyse</h3>
+            <div class="result-content">
+                {{ resultat|linebreaks }}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Tableau de données -->
+        <div class="data-table-container">
+            <h3>Aperçu des données</h3>
+            <div class="table-wrapper">
+                {{ df|safe }}
+            </div>
+        </div>
+    </div>
+    {% endif %}
 </div>
 
-<script>
-  $(document).ready(function () {
-    // Cacher les listes déroulantes au chargement initial de la page
-    $(
-      "#col_name1, #RowNumb ,#parcourir_rows ,#Head, #Tail ,#FromRowNumb,#ToRowNumb ,#colonne"
-    ).hide();
-
-    $("#parcourir_chart").change(function () {
-      var selected_chart = $(this).val();
-      console.log(selected_chart); // Vérifier la valeur sélectionnée dans la console
-
-      if (selected_chart === "FindElem") {
-        $(
-          "#col_name1, #RowNumb ,#parcourir_rows ,#Head, #Tail ,#FromRowNumb,#ToRowNumb ,#colonne"
-        ).hide();
-        $("#col_name1, #RowNumb").show();
-      } else if (selected_chart === "Slicing") {
-        $(
-          "#col_name1, #RowNumb ,#parcourir_rows ,#Head, #Tail ,#FromRowNumb,#ToRowNumb ,#colonne"
-        ).hide();
-        $("#parcourir_rows").show();
-
-        $("#parcourir_rows").change(function () {
-          var selected_chart_rows = $(this).val();
-          console.log(selected_chart_rows);
-          if (selected_chart_rows === "NbrOfRowsTop") {
-            $(
-              "#col_name1, #RowNumb ,#parcourir_rows ,#Head, #Tail ,#FromRowNumb,#ToRowNumb ,#colonne"
-            ).hide();
-            $("#Head ,#colonne").show();
-          } else if (selected_chart_rows === "NbrOfRowsBottom") {
-            $(
-              "#col_name1, #RowNumb ,#parcourir_rows ,#Head, #Tail ,#FromRowNumb,#ToRowNumb ,#colonne"
-            ).hide();
-            $("#Tail , #colonne").show();
-          } else if (selected_chart_rows === "FromRowToRow") {
-            $(
-              "#col_name1, #RowNumb ,#parcourir_rows ,#Head, #Tail ,#FromRowNumb,#ToRowNumb ,#colonne"
-            ).hide();
-            $("#FromRowNumb,#ToRowNumb , #colonne").show();
-          }
-        });
-      } else if (selected_chart === "GroupBy") {
-        // Si aucune sélection n'est faite ou si la sélection est par défaut
-        $(
-          "#col_name1, #RowNumb ,#parcourir_rows ,#Head, #Tail ,#FromRowNumb,#ToRowNumb"
-        ).hide(); // Cacher les deux listes déroulantes
-      }
-    });
-  });
-</script>
-{% endblock content %}
+{% endblock %}

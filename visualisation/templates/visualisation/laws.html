@@ -1,0 +1,76 @@
+{% extends "../base/base.html" %}
+{% load static %}
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/law.css' %}" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+{% endblock style %}
+
+{% block content %}
+<div class="home__container">
+    <p>Choisissez votre loi de probabilité :</p>
+    <div class="home__cards">
+        <ul class="card__list">
+            <li class="card__item">
+                <a href="{% url 'binomiale' %}" class="card__link">
+                    <div class="graph__card">
+                        <div class="icon-title-wrapper">
+                            <i class="fas fa-chart-bar"></i>
+                            <h5 class="card-title">Binomiale</h5>
+                        </div>
+                    </div>
+                </a>
+            </li>
+            <li class="card__item">
+                <a href="{% url 'bernoulli' %}" class="card__link">
+                    <div class="graph__card">
+                        <div class="icon-title-wrapper">
+                            <i class="fas fa-coins"></i>
+                            <h5 class="card-title">Bernoulli</h5>
+                        </div>
+                    </div>
+                </a>
+            </li>
+            <li class="card__item">
+                <a href="{% url 'normale' %}" class="card__link">
+                    <div class="graph__card">
+                        <div class="icon-title-wrapper">
+                            <i class="fas fa-chart-line"></i>
+                            <h5 class="card-title">Normale</h5>
+                        </div>
+                    </div>
+                </a>
+            </li>
+            <li class="card__item">
+                <a href="{% url 'poisson' %}" class="card__link">
+                    <div class="graph__card">
+                        <div class="icon-title-wrapper">
+                            <i class="fas fa-calculator"></i>
+                            <h5 class="card-title">Poisson</h5>
+                        </div>
+                    </div>
+                </a>
+            </li>
+            <li class="card__item">
+                <a href="{% url 'uniforme' %}" class="card__link">
+                    <div class="graph__card">
+                        <div class="icon-title-wrapper">
+                            <i class="fas fa-equals"></i>
+                            <h5 class="card-title">Uniforme</h5>
+                        </div>
+                    </div>
+                </a>
+            </li>
+            <li class="card__item">
+                <a href="{% url 'exponentielle' %}" class="card__link">
+                    <div class="graph__card">
+                        <div class="icon-title-wrapper">
+                            <i class="fas fa-chart-line"></i>
+                            <h5 class="card-title">Exponentielle</h5>
+                        </div>
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+{% endblock content %}

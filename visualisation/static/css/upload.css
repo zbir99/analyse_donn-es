@@ -1,161 +1,397 @@
-.upload__container {
-  display: flex;
-  justify-content: center; /* Centrer horizontalement */
-  align-items: center;    /* Centrer verticalement */
-  height: 60vh;          /* Prendre toute la hauteur de la page */
+/* Variables et reset */
+:root {
+  --primary-color: #4a90e2;
+  --secondary-color: #2c3e50;
+  --accent-color: #e74c3c;
+  --background-color: #f5f7fa;
+  --text-color: #34495e;
+  --border-radius: 10px;
+  --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
-  background-color: #efeff39d; /* Couleur de fond de la page */
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  line-height: 1.6;
 }
 
+/* Container principal */
+.main-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
 
+/* Section d'accueil */
+.welcome-section {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding: 2rem;
+}
+
+.welcome-section h1 {
+  font-size: 2.5rem;
+  color: var(--secondary-color);
+  margin-bottom: 1rem;
+}
+
+.welcome-section p {
+  font-size: 1.1rem;
+  color: #666;
+}
+
+/* Zone d'upload */
+.upload-box {
+  background: white;
+  padding: 2rem;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.file-input-container {
+  margin-bottom: 1.5rem;
+}
+
+.file-input {
+  display: none;
+}
+
+.file-label {
+  display: inline-block;
+  padding: 1rem 2rem;
+  background: #f8f9fa;
+  border: 2px dashed #dee2e6;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.file-label:hover {
+  border-color: var(--primary-color);
+  background: #e8f0fe;
+}
+
+.file-icon {
+  font-size: 1.5rem;
+  margin-right: 0.5rem;
+}
+
+/* Boutons */
+.upload-btn, .analyze-btn {
+  background: var(--primary-color);
+  color: white;
+  padding: 0.8rem 2rem;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.3s ease;
+}
+
+.upload-btn:hover, .analyze-btn:hover {
+  background: #357abd;
+}
+
+/* Section d'analyse */
+.analysis-section {
+  background: white;
+  padding: 2rem;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+}
+
+.analysis-options {
+  margin-bottom: 2rem;
+}
+
+.analysis-options h2 {
+  color: var(--secondary-color);
+  margin-bottom: 1.5rem;
+}
+
+/* Groupes de formulaires */
+.select-group, .input-group {
+  margin-bottom: 1.5rem;
+}
+
+.select-group label, .input-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--secondary-color);
+  font-weight: 500;
+}
+
+select, input[type="number"] {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+select:focus, input[type="number"]:focus {
+  border-color: var(--primary-color);
+  outline: none;
+}
+
+/* Résultats */
+.results-box {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: var(--border-radius);
+  margin-bottom: 2rem;
+}
+
+.results-box h3 {
+  color: var(--secondary-color);
+  margin-bottom: 1rem;
+}
+
+.result-content {
+  background: white;
+  padding: 1rem;
+  border-radius: var(--border-radius);
+}
+
+/* Table de données */
+.data-table-container {
+  overflow-x: auto;
+}
+
+.table-wrapper {
+  margin-top: 1rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+th {
+  background: var(--primary-color);
+  color: white;
+  padding: 1rem;
+  text-align: left;
+}
+
+td {
+  padding: 0.8rem;
+  border-bottom: 1px solid #ddd;
+}
+
+tr:nth-child(even) {
+  background: #f8f9fa;
+}
+
+tr:hover {
+  background: #e8f0fe;
+}
+
+/* Utilitaires */
+.hidden {
+  display: none;
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+  .main-container {
+      padding: 1rem;
+  }
+
+  .welcome-section h1 {
+      font-size: 2rem;
+  }
+
+  .upload-box, .analysis-section {
+      padding: 1rem;
+  }
+}
+.upload__container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: #ffffff;
+  border-radius: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
 
 .form__upload {
-  grid-row: 1/1;
-  grid-column: 1/2;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-  justify-content: center;
+  max-width: 600px;
+  margin: 0 auto 2rem;
+  padding: 2rem;
+  background: #f8fafc;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-
-
-.form__selects {
-  grid-row: 2/3;
-  grid-column: 1/2;
-
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: end;
-  justify-content: center;
+/* Style pour les champs du formulaire */
+.form__upload p {
+  margin-bottom: 1.5rem;
 }
 
-.form-select {
-  margin-bottom: 20px;
+.form__upload label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #1e293b;
+  font-size: 0.95rem;
 }
 
-.image__container {
-  grid-row: 1/-1;
-  grid-column: 2/3;
-
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-.image__container img {
+.form__upload input {
   width: 100%;
-  max-width: 800px;
+  padding: 0.75rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
 }
 
-input[type="file"] {
+.form__upload input:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+/* Style pour le bouton */
+.btn-primary {
+  display: block;
   width: 100%;
-  position: relative;
-}
-
-/* file upload button */
-input[type="file"]::file-selector-button {
-  width: 136px;
-  color: transparent;
-  border-radius: 4px;
-  padding: 0 16px;
-  height: 40px;
+  padding: 1rem;
+  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
   cursor: pointer;
-  background-color: #9ac7a8;
-  border: 1px solid rgba(0, 0, 0, 0.16);
-  box-shadow: 0px 1px 0px rgba(0, 0, 0, 0.05);
-  margin-right: 16px;
-  transition: background-color 200ms;
+  transition: all 0.3s ease;
 }
 
-/* file upload button hover state */
-input[type="file"]::file-selector-button:hover {
-  background-color: #0d370d75;
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
 }
 
-/* file upload button active state */
-input[type="file"]::file-selector-button:active {
-  background-color: #e5e7eb;
+.btn-primary:active {
+  transform: translateY(0);
 }
 
-/* Faked label styles and icon */
-input[type="file"]::before {
-  position: absolute;
-  pointer-events: none;
-  top: 10px;
-  left: 16px;
-  height: 20px;
-  width: 20px;
- 
-  content: "";
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%230964B0'%3E%3Cpath d='M18 15v3H6v-3H4v3c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-3h-2zM7 9l1.41 1.41L11 7.83V16h2V7.83l2.59 2.58L17 9l-5-5-5 5z'/%3E%3C/svg%3E");
+/* Container pour l'image/résultat */
+.image__container {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-input[type="file"]::after {
-  position: absolute;
-  pointer-events: none;
-  top: 11px;
-  left: 40px;
-  color: #0c0c0b;
-  font-weight: bold;
-  content: "Upload File";
+.image__container p {
+  font-size: 1.2rem;
+  color: #1e293b;
+  margin-bottom: 1rem;
+  font-weight: 600;
 }
 
-.form__paragraph {
-  align-self: self-start;
-  font-size: 20px;
-  font-weight: bold;
-  
+/* Style pour les messages d'erreur du formulaire */
+.errorlist {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0;
+  color: #dc2626;
+  font-size: 0.9rem;
 }
 
-.scrollable-table {
+/* Animation pour le chargement du formulaire */
+@keyframes slideIn {
+  from {
+      opacity: 0;
+      transform: translateY(20px);
+  }
+  to {
+      opacity: 1;
+      transform: translateY(0);
+  }
+}
+
+.form__upload {
+  animation: slideIn 0.5s ease forwards;
+}
+
+/* Style pour le graphique */
+.image__container img,
+.image__container div {
   width: 100%;
-  overflow-x: auto; /* Enable horizontal scrolling */
-  overflow-y: auto; /* Enable vertical scrolling */
-  max-height: 400px; /* Adjust the max-height as needed */
-}
-.scrollable-table table {
-  width: auto; /* Set table width to auto */
-  min-width: 100%; /* Minimum table width */
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin-top: 1rem;
 }
 
-/* Style pour les en-têtes */
-.scrollable-table thead th {
-  background-color: #9ac7a8; /* Fond des en-têtes */
-  padding: 12px 8px; /* Espacement interne */
-  border: 1px solid #ccc; /* Bordure pour chaque cellule */
-  text-align: left; /* Alignement à gauche */
-  font-weight: bold; /* Texte en gras */
+/* Media Queries */
+@media (max-width: 768px) {
+  .upload__container {
+      padding: 1rem;
+      margin: 1rem;
+  }
+
+  .form__upload {
+      padding: 1.5rem;
+  }
+
+  .btn-primary {
+      padding: 0.875rem;
+  }
 }
 
-/* Style pour les cellules du corps */
-.scrollable-table tbody td {
-  padding: 10px 8px; /* Espacement interne */
-  border: 1px solid #603535; /* Bordure pour chaque cellule */
+/* Style pour les messages de validation */
+.help-text {
+  font-size: 0.875rem;
+  color: #64748b;
+  margin-top: 0.25rem;
 }
 
-/* Rendre la table défilable horizontalement */
-.scrollable-table {
-  overflow-x: auto; /* Défilement horizontal */
-  overflow-y: auto; /* Défilement vertical */
-  max-height: 500px; /* Limite en hauteur */
- 
-  margin-top: 20px; /* Espacement en haut */
+/* Effet de focus sur le conteneur du formulaire */
+.form__upload:focus-within {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
-/* Optionnel : style pour les lignes alternées */
-.scrollable-table tbody tr:nth-child(odd) {
-  background-color: #f9f9f9; /* Couleur de fond pour les lignes impaires */
-}
-.scrollable-table tbody tr:nth-child(even) {
-  background-color: #ffffff; /* Couleur de fond pour les lignes paires */
+/* Style pour le hover des inputs */
+.form__upload input:hover {
+  border-color: #cbd5e1;
 }
 
-.bt1{
-  margin: 10px;
+/* Animation pour le résultat */
+.image__container {
+  opacity: 0;
+  animation: fadeIn 0.5s ease forwards;
+  animation-delay: 0.3s;
 }
 
+@keyframes fadeIn {
+  from {
+      opacity: 0;
+  }
+  to {
+      opacity: 1;
+  }
+}
+
+/* Style pour les messages de succès */
+.success-message {
+  color: #059669;
+  background: #ecfdf5;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
