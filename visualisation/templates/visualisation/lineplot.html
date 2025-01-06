@@ -1,0 +1,76 @@
+{% extends '../base/base.html' %}
+{% load static %}
+
+{% block style %}
+<link href="{% static 'css/upload.css' %}" rel="stylesheet" />
+<script src="{% static 'js/upload.js' %}" defer></script>
+{% endblock style %}
+
+{% block content %}
+<div class="main-container">
+    <div class="welcome-section">
+        <h1>Graphique Linéaire</h1>
+        <p>Importez vos fichiers CSV ou Excel pour visualiser vos données</p>
+    </div>
+
+    <div class="upload__container">
+        <form class="form__upload" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <div class="upload-box">
+                <div class="file-input-container">
+                    <input type="file" id="csv_file" name="csv_file" 
+                        accept=".csv,.xlsx,.xls" required class="file-input">
+                    <label for="csv_file" class="file-label">
+                        <span class="file-icon">📁</span>
+                        <span>Choisir un fichier</span>
+                    </label>
+                </div>
+            </div>
+
+            {% if columns %}
+            <div class="analysis-section">
+                <div class="analysis-options">
+                    <div class="select-group">
+                        <label for="x_column">Axe X (Temps/Séquence)</label>
+                        <select name="x_column" id="x_column" required>
+                            <option value="">Sélectionnez la colonne X</option>
+                            {% for column in columns %}
+                            <option value="{{ column }}">{{ column }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="select-group">
+                        <label for="y_column">Axe Y (Valeurs)</label>
+                        <select name="y_column" id="y_column" required>
+                            <option value="">Sélectionnez la colonne Y</option>
+                            {% for column in columns %}
+                            <option value="{{ column }}">{{ column }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <button type="submit" class="btn-primary">
+                Analyser les données
+            </button>
+        </form>
+
+        {% if error %}
+        <div class="error-message">
+            {{ error }}
+        </div>
+        {% endif %}
+
+        {% if plot_data %}
+        <div class="image__container">
+            <p>Résultat :</p>
+            {{ plot_data|safe }}
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

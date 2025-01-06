@@ -39,6 +39,9 @@ from .forms import UniformeForm
 def dataframe(request):
     return render(request, "visualisation/dataFrameTable.html")
 
+def home(request):
+    return render(request, "visualisation/home.html" )
+
 def dataframe_upload(request):
     if request.method == 'POST':
         if 'csv_file' not in request.FILES:
@@ -322,4 +325,251 @@ def Exponentielle(request):
         form = ExponentielleForm()
 
     return render(request, 'visualisation/exponentielle.html', {'form': form})
+
+#-------------------------------------------------------------------------------------------------------------------------
+def graphics(request):
+    return render(request, "visualisation/graphics.html")
+
+def check_numeric(df, column):
+    """Vérifie si une colonne est numérique ou peut être convertie en numérique"""
+    try:
+        pd.to_numeric(df[column])
+        return True
+    except:
+        return False
+
+def barplot(request):
+    context = {}
+    if request.method == 'POST' and 'csv_file' in request.FILES:
+        file = request.FILES['csv_file']
+        try:
+            # Lecture du fichier
+            df = pd.read_csv(file) if file.name.endswith('.csv') else pd.read_excel(file)
+            
+            # Stockage des colonnes dans le contexte
+            context['columns'] = df.columns.tolist()
+            
+            # Si des colonnes sont sélectionnées
+            x_col = request.POST.get('x_column')
+            y_col = request.POST.get('y_column')
+            
+            if x_col and y_col:
+                # Vérification si y_col est numérique
+                if not check_numeric(df, y_col):
+                    context['error'] = f"La colonne {y_col} doit être numérique pour l'axe Y"
+                    return render(request, 'visualisation/barplot.html', context)
+                
+                # Conversion des données si nécessaire
+                df[y_col] = pd.to_numeric(df[y_col])
+                
+                # Création du graphique
+                fig = px.bar(df, x=x_col, y=y_col, title='Diagramme en barres')
+                context['plot_data'] = fig.to_html(full_html=False)
+            
+        except Exception as e:
+            context['error'] = str(e)
+    
+    return render(request, 'visualisation/barplot.html', context)
+
+def scatterplot(request):
+    context = {}
+    if request.method == 'POST' and 'csv_file' in request.FILES:
+        file = request.FILES['csv_file']
+        try:
+            df = pd.read_csv(file) if file.name.endswith('.csv') else pd.read_excel(file)
+            context['columns'] = df.columns.tolist()
+            
+            x_col = request.POST.get('x_column')
+            y_col = request.POST.get('y_column')
+            
+            if x_col and y_col:
+                # Vérification des types de données
+                if not check_numeric(df, x_col):
+                    context['error'] = f"La colonne {x_col} doit être numérique pour l'axe X"
+                    return render(request, 'visualisation/scatterplot.html', context)
+                
+                if not check_numeric(df, y_col):
+                    context['error'] = f"La colonne {y_col} doit être numérique pour l'axe Y"
+                    return render(request, 'visualisation/scatterplot.html', context)
+                
+                # Conversion des données
+                df[x_col] = pd.to_numeric(df[x_col])
+                df[y_col] = pd.to_numeric(df[y_col])
+                
+                fig = px.scatter(df, x=x_col, y=y_col, title='Nuage de points')
+                context['plot_data'] = fig.to_html(full_html=False)
+            
+        except Exception as e:
+            context['error'] = str(e)
+    
+    return render(request, 'visualisation/scatterplot.html', context)
+
+def lineplot(request):
+    context = {}
+    if request.method == 'POST' and 'csv_file' in request.FILES:
+        file = request.FILES['csv_file']
+        try:
+            df = pd.read_csv(file) if file.name.endswith('.csv') else pd.read_excel(file)
+            context['columns'] = df.columns.tolist()
+            
+            x_col = request.POST.get('x_column')
+            y_col = request.POST.get('y_column')
+            
+            if x_col and y_col:
+                # Vérification si y_col est numérique
+                if not check_numeric(df, y_col):
+                    context['error'] = f"La colonne {y_col} doit être numérique pour l'axe Y"
+                    return render(request, 'visualisation/lineplot.html', context)
+                
+                # Conversion des données
+                df[y_col] = pd.to_numeric(df[y_col])
+                
+                fig = px.line(df, x=x_col, y=y_col, title='Graphique linéaire')
+                context['plot_data'] = fig.to_html(full_html=False)
+            
+        except Exception as e:
+            context['error'] = str(e)
+    
+    return render(request, 'visualisation/lineplot.html', context)
+
+def piechart(request):
+    context = {}
+    if request.method == 'POST' and 'csv_file' in request.FILES:
+        file = request.FILES['csv_file']
+        try:
+            df = pd.read_csv(file) if file.name.endswith('.csv') else pd.read_excel(file)
+            context['columns'] = df.columns.tolist()
+            
+            values_col = request.POST.get('values_column')
+            names_col = request.POST.get('names_column')
+            
+            if values_col and names_col:
+                # Vérification si values_col est numérique
+                if not check_numeric(df, values_col):
+                    context['error'] = f"La colonne {values_col} doit être numérique pour les valeurs"
+                    return render(request, 'visualisation/piechart.html', context)
+                
+                # Conversion des données
+                df[values_col] = pd.to_numeric(df[values_col])
+                
+                fig = px.pie(df, values=values_col, names=names_col, title='Diagramme circulaire')
+                context['plot_data'] = fig.to_html(full_html=False)
+            
+        except Exception as e:
+            context['error'] = str(e)
+    
+    return render(request, 'visualisation/piechart.html', context)
+
+def histogram(request):
+    context = {}
+    if request.method == 'POST' and 'csv_file' in request.FILES:
+        file = request.FILES['csv_file']
+        try:
+            df = pd.read_csv(file) if file.name.endswith('.csv') else pd.read_excel(file)
+            context['columns'] = get_numeric_columns(df)
+            
+            data_column = request.POST.get('data_column')
+            bins = int(request.POST.get('bins', 30))
+            
+            if data_column:
+                if data_column not in df.select_dtypes(include=[np.number]).columns:
+                    context['error'] = "La colonne sélectionnée doit être numérique"
+                    return render(request, 'visualisation/histogram.html', context)
+                
+                fig = px.histogram(df, x=data_column, nbins=bins,
+                                title=f'Distribution de {data_column}')
+                fig.update_layout(showlegend=True)
+                context['plot_data'] = fig.to_html(full_html=False)
+            
+        except Exception as e:
+            context['error'] = str(e)
+    
+    return render(request, 'visualisation/histogram.html', context)
+
+def get_numeric_columns(df):
+    return df.select_dtypes(include=[np.number]).columns.tolist()
+
+def boxplot(request):
+    context = {}
+    if request.method == 'POST' and 'csv_file' in request.FILES:
+        file = request.FILES['csv_file']
+        try:
+            df = pd.read_csv(file) if file.name.endswith('.csv') else pd.read_excel(file)
+            context['columns'] = df.columns.tolist()
+            
+            value_column = request.POST.get('value_column')
+            group_column = request.POST.get('group_column')
+            
+            if value_column:
+                if value_column not in df.select_dtypes(include=[np.number]).columns:
+                    context['error'] = "La colonne des valeurs doit être numérique"
+                    return render(request, 'visualisation/boxplot.html', context)
+                
+                fig = px.box(df, x=group_column, y=value_column,
+                        title=f'Boîte à moustaches de {value_column}')
+                context['plot_data'] = fig.to_html(full_html=False)
+            
+        except Exception as e:
+            context['error'] = str(e)
+    
+    return render(request, 'visualisation/boxplot.html', context)
+
+def heatmap(request):
+    context = {}
+    if request.method == 'POST' and 'csv_file' in request.FILES:
+        file = request.FILES['csv_file']
+        try:
+            df = pd.read_csv(file) if file.name.endswith('.csv') else pd.read_excel(file)
+            numeric_columns = get_numeric_columns(df)
+            context['columns'] = numeric_columns
+            
+            selected_columns = request.POST.getlist('selected_columns')
+            
+            if selected_columns:
+                # Vérifier que toutes les colonnes sélectionnées sont numériques
+                if not all(col in numeric_columns for col in selected_columns):
+                    context['error'] = "Toutes les colonnes sélectionnées doivent être numériques"
+                    return render(request, 'visualisation/heatmap.html', context)
+                
+                correlation_matrix = df[selected_columns].corr()
+                
+                fig = px.imshow(correlation_matrix,
+                            labels=dict(x="Variables", y="Variables", color="Corrélation"),
+                            x=selected_columns,
+                            y=selected_columns,
+                            color_continuous_scale="RdBu",
+                            title="Carte de chaleur des corrélations")
+                
+                context['plot_data'] = fig.to_html(full_html=False)
+            
+        except Exception as e:
+            context['error'] = str(e)
+    
+    return render(request, 'visualisation/heatmap.html', context)
+
+def violin(request):
+    context = {}
+    if request.method == 'POST' and 'csv_file' in request.FILES:
+        file = request.FILES['csv_file']
+        try:
+            df = pd.read_csv(file) if file.name.endswith('.csv') else pd.read_excel(file)
+            context['columns'] = df.columns.tolist()
+            
+            value_column = request.POST.get('value_column')
+            group_column = request.POST.get('group_column')
+            
+            if value_column and group_column:
+                if value_column not in df.select_dtypes(include=[np.number]).columns:
+                    context['error'] = "La colonne des valeurs doit être numérique"
+                    return render(request, 'visualisation/violin.html', context)
+                
+                fig = px.violin(df, x=group_column, y=value_column,
+                            box=True, points="all",
+                            title=f'Distribution de {value_column} par {group_column}')
+                context['plot_data'] = fig.to_html(full_html=False)
+            
+        except Exception as e:
+            context['error'] = str(e)
+    
+    return render(request, 'visualisation/violin.html', context)
 
